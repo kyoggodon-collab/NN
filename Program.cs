@@ -24,8 +24,10 @@ app.MapGet("/api/network/preset/{name}", (string name, SnnSimulationEngine engin
     return Results.Ok(topology);
 });
 
-Console.WriteLine("SNN GUI Server Started on http://localhost:5000");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var url = $"http://0.0.0.0:{port}";
+Console.WriteLine($"SNN GUI Server Started on {url}");
 
-app.Run("http://localhost:5000");
+app.Run(url);
 
 public record SimulationRequest(SnnNetworkTopology? Topology, SimulationConfig? Config);
