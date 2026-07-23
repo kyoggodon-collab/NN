@@ -1,14 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# プロジェクトファイルをコピーして復元
-COPY ["卒研コード 1107/卒研コード 1107.csproj", "卒研コード 1107/"]
-RUN dotnet restore "卒研コード 1107/卒研コード 1107.csproj"
+# .csproj ファイルを自動検出してパッケージ復元
+COPY *.csproj ./
+RUN dotnet restore
 
-# ソースコードをコピーしてビルド・パブリッシュ
+# すべてのソースコードをコピーしてビルド・パブリッシュ
 COPY . .
-WORKDIR "/src/卒研コード 1107"
-RUN dotnet publish "卒研コード 1107.csproj" -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish
 
 # 実行環境イメージ
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
