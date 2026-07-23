@@ -1,0 +1,545 @@
+:root {
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --bg-sidebar: #111827;
+    --border-color: #334155;
+    --accent-blue: #3b82f6;
+    --accent-indigo: #6366f1;
+    --accent-teal: #14b8a6;
+    --accent-gold: #f59e0b;
+    --accent-red: #ef4444;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header */
+.app-header {
+    height: 56px;
+    background-color: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 22px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.version-badge {
+    background-color: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preset-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+
+    select {
+        background-color: var(--bg-card);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 5px 10px;
+        border-radius: 6px;
+        outline: none;
+    }
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+    margin: 0 4px;
+}
+
+.btn {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+.btn:hover {
+    background-color: #334155;
+    border-color: #475569;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
+.btn-danger {
+    background: #dc2626;
+    border: none;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Main Body Layout */
+.main-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Left Sidebar */
+.sidebar-left {
+    width: 220px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-left h3, .sidebar-right h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.tool-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tool-btn {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+}
+
+.tool-btn:hover {
+    background-color: #334155;
+}
+
+.tool-btn.active {
+    background-color: rgba(99, 102, 241, 0.2);
+    border-color: var(--accent-indigo);
+    color: #a5b4fc;
+}
+
+.btn-danger-soft {
+    color: #f87171;
+}
+
+.btn-danger-soft:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+.canvas-zoom-controls {
+    margin-top: auto;
+    display: flex;
+    gap: 4px;
+
+    button {
+        flex: 1;
+        background-color: var(--bg-card);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 6px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+}
+
+/* Center Canvas */
+.canvas-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #0b0f19;
+    position: relative;
+}
+
+.canvas-toolbar {
+    height: 32px;
+    background-color: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.canvas-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.editor-svg {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.editor-svg text {
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+}
+
+/* SVG Node & Wire Styles */
+.node-group {
+    cursor: move;
+    user-select: none;
+}
+
+.node-rect-neuron {
+    fill: #1e293b;
+    stroke: #3b82f6;
+    stroke-width: 2px;
+    rx: 8px;
+    transition: stroke 0.15s;
+}
+
+.node-group.selected .node-rect-neuron {
+    stroke: #ef4444;
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
+}
+
+.node-circle-source {
+    fill: #1e293b;
+    stroke: #f59e0b;
+    stroke-width: 2px;
+}
+
+.node-group.selected .node-circle-source {
+    stroke: #ef4444;
+    stroke-width: 3px;
+}
+
+.port-circle {
+    fill: #0b0f19;
+    stroke: #38bdf8;
+    stroke-width: 2px;
+    cursor: pointer;
+}
+
+.port-circle:hover {
+    fill: #38bdf8;
+    r: 6px;
+}
+
+.wire-path {
+    fill: none;
+    stroke: #38bdf8;
+    stroke-width: 2.5px;
+    stroke-linecap: round;
+    cursor: pointer;
+    transition: stroke 0.15s;
+}
+
+.wire-path:hover, .wire-path.selected {
+    stroke: #f43f5e;
+    stroke-width: 3.5px;
+    filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.8));
+}
+
+.wire-label {
+    fill: #a5b4fc;
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+}
+
+/* Right Sidebar */
+.sidebar-right {
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-left: 1px solid var(--border-color);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.inspector-content {
+    flex: 1;
+}
+
+.empty-selection {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.prop-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.prop-card h4 {
+    font-size: 14px;
+    color: var(--accent-teal);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 6px;
+}
+
+.prop-field {
+    margin-bottom: 10px;
+
+    label {
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+    }
+
+    input, select {
+        width: 100%;
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 6px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: var(--accent-indigo);
+    }
+}
+
+.sim-config-box {
+    margin-top: auto;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+
+    h4 {
+        font-size: 13px;
+        color: var(--accent-gold);
+        margin-bottom: 8px;
+    }
+}
+
+/* Bottom Waveform Panel */
+.waveform-panel {
+    height: 240px;
+    background-color: var(--bg-sidebar);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transition: height 0.2s ease;
+}
+
+.waveform-panel.collapsed {
+    height: 36px;
+}
+
+.waveform-header {
+    height: 36px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.waveform-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+
+    label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+}
+
+.btn-sm {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.waveform-content {
+    flex: 1;
+    padding: 8px 16px;
+    position: relative;
+}
+
+/* ─── Pan / Zoom ──────────────────────────────────────────────────────────── */
+.canvas-viewport {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ホイールクリック中のパンカーソル */
+.editor-svg.panning {
+    cursor: grabbing !important;
+}
+
+/* ズームインジケータ（右下に浮かぶバッジ） */
+.zoom-indicator {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    background: rgba(30, 41, 59, 0.85);
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s;
+}
+
+/* ─── ラバーバンド選択矩形 ────────────────────────────────────────────────── */
+.rubber-band {
+    fill: rgba(59, 130, 246, 0.10);
+    stroke: #3b82f6;
+    stroke-width: 1.5;
+    stroke-dasharray: 5, 3;
+    pointer-events: none;
+}
+
+/* ─── 複数選択インスペクタ ────────────────────────────────────────────────── */
+.multi-select-card {
+    border: 1px solid #3b82f6;
+    background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(30,41,59,0.95));
+}
+
+.multi-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.multi-hint {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.multi-apply-hint {
+    font-size: 11px;
+    color: #3b82f6;
+    margin-top: 8px;
+    text-align: center;
+    opacity: 0.85;
+}
+
