@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNN Analysis & GUI Editor Environment</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js for Waveform Plotting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">⚡</div>
+                <h1>SNN GUI Analysis Environment</h1>
+                <span class="version-badge">v2.0 Cross-Platform</span>
+            </div>
+            
+            <div class="header-actions">
+                <div class="preset-group">
+                    <label for="presetSelect">回路プリセット:</label>
+                    <select id="presetSelect">
+                        <option value="">-- プリセットを選択 --</option>
+                        <option value="fig1">論文図1 (2ニューロン接続回路)</option>
+                        <option value="cpg">CPG (相互抑制発振回路)</option>
+                        <option value="hopfield">ホップフィールド ネットワーク</option>
+                    </select>
+                    <button id="btnLoadPreset" class="btn btn-secondary">読み込み</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <button id="btnUndo" class="btn btn-icon" title="元に戻す (Ctrl+Z)"><span>↩</span> 元に戻す</button>
+                <button id="btnRedo" class="btn btn-icon" title="やり直す (Ctrl+Y)"><span>↪</span> やり直す</button>
+
+                <div class="divider"></div>
+
+                <button id="btnNew" class="btn btn-icon" title="新規作成"><span>📄</span> 新規</button>
+                <button id="btnSaveJson" class="btn btn-icon" title="JSON保存"><span>💾</span> JSON保存</button>
+                <button id="btnLoadJson" class="btn btn-icon" title="JSON開く"><span>📂</span> JSON開く</button>
+                <input type="file" id="fileInputJson" accept=".json" style="display:none;">
+
+                <div class="divider"></div>
+
+                <button id="btnRunSim" class="btn btn-primary"><span>▶</span> シミュレーション実行</button>
+                <button id="btnResetSim" class="btn btn-danger"><span>⏹</span> リセット</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-body">
+            <!-- Left Sidebar - Toolbar Palette -->
+            <aside class="sidebar-left">
+                <h3>ツール パレット</h3>
+                <div class="tool-group">
+                    <button class="tool-btn active" data-tool="select">
+                        <span class="tool-icon">↖</span> 選択 / 移動
+                    </button>
+                    <button class="tool-btn" data-tool="neuron">
+                        <span class="tool-icon">🧠</span> ニューロン (N)
+                    </button>
+                    <button class="tool-btn" data-tool="source">
+                        <span class="tool-icon">⚡</span> 外部電流源 (SRC)
+                    </button>
+                    <button class="tool-btn" data-tool="wire">
+                        <span class="tool-icon">🔌</span> 配線 / ネット (Net)
+                    </button>
+                    <button class="tool-btn" data-tool="synapse">
+                        <span class="tool-icon">🔀</span> シナプス + 遅延
+                    </button>
+                    <button class="tool-btn" data-tool="gap">
+                        <span class="tool-icon">↔</span> ギャップジャンクション
+                    </button>
+                </div>
+
+                <h3 style="margin-top: 20px;">編集操作</h3>
+                <div class="tool-group">
+                    <button id="btnCloneSelected" class="tool-btn">
+                        <span class="tool-icon">📋</span> 選択要素を複製
+                    </button>
+                    <button id="btnDeleteSelected" class="tool-btn btn-danger-soft">
+                        <span class="tool-icon">🗑</span> 選択要素を削除
+                    </button>
+                    <button id="btnClearCanvas" class="tool-btn btn-danger-soft">
+                        <span class="tool-icon">💥</span> キャンバスクリア
+                    </button>
+                </div>
+
+                <div class="canvas-zoom-controls">
+                    <button id="btnZoomIn">＋</button>
+                    <button id="btnZoomReset">100%</button>
+                    <button id="btnZoomOut">－</button>
+                </div>
+            </aside>
+
+            <!-- Center Editing Canvas Area -->
+            <main class="canvas-container">
+                <div class="canvas-toolbar">
+                    <span id="canvasStatus">選択モード: ノードを選択またはドラッグ移動してください</span>
+                    <span id="netCountStatus">ネット数: 0 | ノード数: 0</span>
+                </div>
+                <div class="canvas-viewport" id="canvasViewport">
+                    <svg id="editorSvg" class="editor-svg">
+                        <defs>
+                            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <!-- キャンバス全体をこのグループでパン/ズーム -->
+                        <g id="canvasRoot">
+                            <rect id="gridBg" width="8000" height="8000" x="-2000" y="-2000" fill="url(#grid)" />
+                            <g id="gWires"></g>
+                            <g id="gTempWire"></g>
+                            <g id="gNodes"></g>
+                        </g>
+                    </svg>
+                    <!-- ズームインジケータ -->
+                    <div class="zoom-indicator" id="zoomIndicator">100%</div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Property Inspector -->
+            <aside class="sidebar-right">
+                <h3>パラメータ インスペクタ</h3>
+                <div id="propertyInspector" class="inspector-content">
+                    <p class="empty-selection">ノードまたは接続線を選択すると、パラメータ編集画面が表示されます。</p>
+                </div>
+
+                <div class="sim-config-box">
+                    <h4>シミュレーション設定</h4>
+                    <div class="prop-field">
+                        <label>解析時間 T_end (µs):</label>
+                        <input type="number" id="simTEnd" value="100" step="10">
+                    </div>
+                    <div class="prop-field">
+                        <label>刻み時間 dt (ns):</label>
+                        <input type="number" id="simDt" value="30" step="1">
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Bottom Waveform Display Panel -->
+        <footer class="waveform-panel" id="waveformPanel">
+            <div class="waveform-header">
+                <div class="panel-title">
+                    <span>📈</span> リアルタイム過渡解析波形 (オシロスコープ)
+                </div>
+                <div class="waveform-controls">
+                    <label><input type="checkbox" id="chkShowVoltages" checked> 膜電位 V_out(t)</label>
+                    <label><input type="checkbox" id="chkShowCurrents"> シナプス/外部電流 I(t)</label>
+                    <button id="btnToggleWaveform" class="btn-sm">最小化 / 表示</button>
+                </div>
+            </div>
+            <div class="waveform-content" id="waveformContent">
+                <canvas id="chartCanvas"></canvas>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
